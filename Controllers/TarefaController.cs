@@ -49,19 +49,22 @@ namespace TrilhaApiDesafio.Controllers
             return Ok(tarefas);
         }
 
-        [HttpGet("ObterPorData")]
+        [HttpGet("ObterPorData")]//🥳
         public IActionResult ObterPorData(DateTime data)
         {
             var tarefa = _context.Tarefas.Where(x => x.Data.Date == data.Date);
             return Ok(tarefa);
         }
 
-        [HttpGet("ObterPorStatus")]
+        [HttpGet("ObterPorStatus")]//🥳
         public IActionResult ObterPorStatus(EnumStatusTarefa status)
         {
             // TODO: Buscar  as tarefas no banco utilizando o EF, que contenha o status recebido por parâmetro
+
             // Dica: Usar como exemplo o endpoint ObterPorData
-            var tarefa = _context.Tarefas.Where(x => x.Status == status);
+            var tarefa = _context.Tarefas.Where(x => x.Status == status).ToList();
+            if (tarefa == null || tarefa.Count == 0)
+                return NotFound(new { mensagem = "Nenhuma tarefa encontrada com esse status." });
             return Ok(tarefa);
         }
 
