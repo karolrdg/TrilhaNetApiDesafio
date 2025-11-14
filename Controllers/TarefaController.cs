@@ -15,6 +15,19 @@ namespace TrilhaApiDesafio.Controllers
             _context = context;
         }
 
+        [HttpPost] //🥳
+        public IActionResult Criar(Tarefa tarefa)
+        {
+            if (tarefa.Data == DateTime.MinValue)
+                return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
+
+            // TODO: Adicionar a tarefa recebida no EF e salvar as mudanças (save changes)
+            _context.Tarefas.Add(tarefa);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(ObterPorId), new { id = tarefa.Id }, tarefa);
+        }
+
         [HttpGet("{id}")]//🥳
         public IActionResult ObterPorId(int id)
         {
@@ -43,9 +56,9 @@ namespace TrilhaApiDesafio.Controllers
         .Where(x => x.Titulo.Contains(titulo))
         .ToList();
 
-    if (tarefas == null || tarefas.Count == 0)
-        return NotFound(new { mensagem = "Nenhuma tarefa encontrada com esse título." });
-            
+            if (tarefas == null || tarefas.Count == 0)
+                return NotFound(new { mensagem = "Nenhuma tarefa encontrada com esse título." });
+
             return Ok(tarefas);
         }
 
@@ -68,18 +81,7 @@ namespace TrilhaApiDesafio.Controllers
             return Ok(tarefa);
         }
 
-        [HttpPost] //🥳
-        public IActionResult Criar(Tarefa tarefa)
-        {
-            if (tarefa.Data == DateTime.MinValue)
-                return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
 
-            // TODO: Adicionar a tarefa recebida no EF e salvar as mudanças (save changes)
-            _context.Tarefas.Add(tarefa);
-            _context.SaveChanges();
-
-            return CreatedAtAction(nameof(ObterPorId), new { id = tarefa.Id }, tarefa);
-        }
 
         [HttpPut("{id}")]//🥳
         public IActionResult Atualizar(int id, Tarefa tarefa)
@@ -93,12 +95,12 @@ namespace TrilhaApiDesafio.Controllers
                 return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
 
             // TODO: Atualizar as informações da variável tarefaBanco com a tarefa recebida via parâmetro
-             tarefaBanco.Titulo = tarefa.Titulo;
+            tarefaBanco.Titulo = tarefa.Titulo;
             tarefaBanco.Descricao = tarefa.Descricao;
             tarefaBanco.Status = tarefa.Status;
             tarefaBanco.Data = tarefa.Data;
             // TODO: Atualizar a variável tarefaBanco no EF e salvar as mudanças (save changes)
-             _context.Tarefas.Update(tarefaBanco);
+            _context.Tarefas.Update(tarefaBanco);
             _context.SaveChanges();
             return Ok(tarefaBanco);
         }
